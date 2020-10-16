@@ -17,11 +17,7 @@ export class SignUpUseCase {
 
     if (_user_exists) return { message: "este e-mail já foi cadastrado." };
 
-    const _user = await this.usersRepository.save({
-      ...user,
-      active: true,
-      is_member: false,
-    });
+    const _user = await this.usersRepository.save(user);
 
     await this.mailProvider.sendMail({
       subject: "Bem vindo ao Ecofreelas",

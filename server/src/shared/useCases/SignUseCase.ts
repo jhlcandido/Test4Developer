@@ -29,8 +29,6 @@ export class SignUseCase {
         process.env.APP_SECRET || "teste",
         { expiresIn: "72h" }
       );
-
-      if (_user.categories && _user.categories.length) first_access = false;
     }
 
     return {
