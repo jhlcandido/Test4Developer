@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 import IUser from "../entities/interfaces/IUser";
 import IUsersRepository from "../repositories/IUsersRepository";
@@ -16,6 +17,11 @@ export class SignUpUseCase {
     const _user_exists = await this.usersRepository.getByEmail(user.email);
 
     if (_user_exists) return { message: "este e-mail já foi cadastrado." };
+
+    user.password = crypto
+      .createHash("sha256")
+      .update(user.password!)
+      .digest("base64");
 
     const _user = await this.usersRepository.save(user);
 

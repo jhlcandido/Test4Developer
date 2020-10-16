@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 import IUser from "../entities/interfaces/IUser";
 import IUsersRepository from "../repositories/IUsersRepository";
@@ -15,7 +16,12 @@ export class SignUseCase {
     let _user: IUser | null = null;
     let first_access = true;
 
-    const authorized = !!_findedUser && user.password === _findedUser.password;
+    const _password = crypto
+      .createHash("sha256")
+      .update(user.password!)
+      .digest("base64");
+
+    const authorized = !!_findedUser && _password === _findedUser.password;
 
     if (!_findedUser) message = "email inválido";
     else if (!authorized) message = "password inválido";
