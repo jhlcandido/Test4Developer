@@ -17,6 +17,7 @@ import { router } from "./shared/routes";
 
 import cors from "cors";
 import morgan from "morgan";
+import { Todo } from "./modules/Todo";
 
 class AppController {
   express: Express;
@@ -46,7 +47,9 @@ class AppController {
     this.express.use(router);
   }
 
-  loadModules() {}
+  loadModules() {
+    new Todo(this.express, this.server);
+  }
 
   defaultRoutes() {
     this.express.use(function (req: Request, res: Response) {
