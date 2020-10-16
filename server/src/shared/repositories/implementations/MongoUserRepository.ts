@@ -4,10 +4,10 @@ import IUsersRepository from "../IUsersRepository";
 import { MongoContext } from "./MongoContext";
 
 const UserSchema = new Schema<IUser>({
-  name: { type: String },
-  email: { type: String },
-  password: { type: String },
-});
+  name: { type: String, required: [true, "campo obrigatório"] },
+  email: { type: String, required: [true, "campo obrigatório"], unique: true },
+  password: { type: String, required: [true, "campo obrigatório"] },
+}); 
 
 export class MongoUserRepository
   extends MongoContext
