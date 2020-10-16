@@ -5,24 +5,27 @@ export class MongoContext {
   public conn: Connection;
 
   constructor() {
-    this.conn = createConnection(
-      "mongodb+srv://jhlcandido:az3eenfv9av8pyf1@cluster0.kwqn9.mongodb.net/test4developer?retryWrites=true&w=majority",
-      {
-        useNewUrlParser: true,
-      }
-    );
-  }
+    const MONGO_DB_HOST = process.env.MONGO_DB_HOST;
+    const MONGO_DB_NAME = process.env.MONGO_DB_NAME;
+    const MONGO_DB_USER = process.env.MONGO_DB_USER;
+    const MONGO_DB_PASS = process.env.MONGO_DB_PASS;
+    const MONGO_DB_PORT = process.env.MONGO_DB_PORT;
 
-  static async getInstance() {
-    try {
-      const _instance = await MongoClient.connect(
-        "mongodb+srv://jhlcandido:az3eenfv9av8pyf1@cluster0.kwqn9.mongodb.net/test4developer?retryWrites=true&w=majority",
-        { useNewUrlParser: true }
-      );
+    let uri = "";
 
-      return _instance;
-    } catch (error) {
-      throw error;
+    if (!MONGO_DB_PORT) {
+      uri = `mongodb+srv://${MONGO_DB_USER}:${MONGO_DB_PASS}@${MONGO_DB_HOST}/${MONGO_DB_NAME}?retryWrites=true&w=majority`;
+    } else if (MONGO_DB_PASS) {
+      uri = `mongodb://${MONGO_DB_USER}:${MONGO_DB_PASS}@${MONGO_DB_HOST}:${MONGO_DB_PORT}/?authSource=admin`;
+    } else {
+      uri = `mongodb://${MONGO_DB_HOST}:${MONGO_DB_PORT}/${MONGO_DB_NAME}`;
     }
+
+    console.log("mongodb uri", uri);
+
+    this.conn = createConnection(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
   }
 }
