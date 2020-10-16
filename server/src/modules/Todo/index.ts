@@ -8,6 +8,6 @@ export class Todo {
   }
 
   routes() {
-    this.express.use("/todo", router);
+    this.express.use("/todos", router);
   }
 }
