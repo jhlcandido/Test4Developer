@@ -3,6 +3,14 @@ import app from "../../app";
 
 describe("SessionController", () => {
   it("Authorize Valid User", async () => {
+    await request(app)
+      .post("/signup")
+      .send({
+        email: "isa@gmail.com",
+        password: "1234",
+      })
+      .expect(200);
+
     const response = await request(app)
       .post("/authorize")
       .send({
@@ -14,7 +22,7 @@ describe("SessionController", () => {
     const { user, token } = response.body;
 
     expect(token).not.toBeNull();
-    expect(user).toHaveProperty("id");
+    expect(user).toHaveProperty("_id");
   });
 
   it("Authorize Invalid Password", async () => {

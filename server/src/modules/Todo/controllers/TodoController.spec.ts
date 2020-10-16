@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../app";
+import app from "../../../app";
 
 describe("SessionController", () => {
   it("Authorize Valid User", async () => {
@@ -14,7 +14,7 @@ describe("SessionController", () => {
     const { user, token } = response.body;
 
     expect(token).not.toBeNull();
-    expect(user).toHaveProperty("id");
+    expect(user).toHaveProperty("_id");
   });
 
   it("Authorize Invalid Password", async () => {
