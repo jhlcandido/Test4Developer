@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  backend:
+    build: .
+    image: jhlcandido/test4developer
+    command: npm run dev
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./:/usr/app
+

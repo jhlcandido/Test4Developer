@@ -1,0 +1,45 @@
+{
+  "name": "test4developer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "engines": {
+    "node": "12.19.0"
+  },
+  "scripts": {
+    "build": "mkdir ./dist; sucrase ./src -d ./dist/src --transforms typescript,imports && cp ./package.json ./dist && cp ./.env ./dist",
+    "prestart": "mkdir ./dist; sucrase ./src -d ./dist/src --transforms typescript,imports && cp ./package.json ./dist && cp ./.env ./dist",
+    "start": "cross-env NODE_ENV=prod node dist/src/server.js",
+    "dev": "cross-env NODE_ENV=dev tsnd --inspect --transpile-only --respawn --ignore-watch node_modules src/server.ts",
+    "test": "cross-env NODE_ENV=test npm run test:run",
+    "swagger-autogen": "node src/swagger.ts"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.4.13",
+    "ts-node-dev": "^1.0.0-pre.61",
+    "typescript": "^4.0.2",
+    "uuidv4": "^6.2.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.7",
+    "@types/express": "^4.17.7",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/morgan": "^1.9.1",
+    "@types/node": "^14.6.0",
+    "@types/node-cron": "^2.0.3",
+    "@types/nodemailer": "^6.4.0",
+    "@types/supertest": "^2.0.10",
+    "@types/uuidv4": "^5.0.0",
+    "@types/validator": "^13.1.0",
+    "jest": "^26.4.2",
+    "sucrase": "^3.15.0",
+    "supertest": "^4.0.2",
+    "ts-jest": "^26.3.0"
+  }
+}
