@@ -1,12 +1,37 @@
-version: "3"
+version: "3.7"
 
 services:
   backend:
     build: .
-    image: jhlcandido/test4developer
-    command: npm run dev
+    container_name: test4developer
+    depends_on:
+      - "mongo"
+    command: sh -c "
+     echo path diretorio atual &&
+     pwd &&
+     echo conteudo diretorio atual &&
+     ls -la &&
+     echo conteudo diretorio pai &&
+     ls -la ../ &&
+     cat package.json &&
+     npm run dev" 
     ports:
       - "4000:4000"
     volumes:
-      - ./:/usr/app
-
+      - .:/usr/test4developer/api
+  mongo:
+    image: "mongo:4.2.6-bionic"
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodata:/data/db
+    restart: always
+  mongo_express:
+    image: mongo-express
+    container_name: mongo_express
+    depends_on:
+      - "mongo"
+    ports:
+      - "8081:8081"
+    restart: always

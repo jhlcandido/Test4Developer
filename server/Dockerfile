@@ -1,5 +1,5 @@
 from node:alpine
-workdir /usr/app
+workdir /usr/test4developer/api
 copy package*.json ./
 run npm install
 copy . .

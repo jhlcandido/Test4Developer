@@ -1,7 +1,13 @@
-import { signUseCase } from ".";
+import { signUpUseCase, signUseCase } from ".";
 
 describe("UserCases", () => {
   it("Authorize Valid User", async () => {
+    await signUpUseCase.execute({
+      name: "Isamara",
+      email: "isa@gmail.com",
+      password: "1234",
+    });
+
     const _authorization = await signUseCase.execute({
       email: "isa@gmail.com",
       password: "1234",
@@ -11,7 +17,7 @@ describe("UserCases", () => {
 
     expect(token).not.toBeNull();
     expect(authorized).toBeTruthy();
-    expect(user).toHaveProperty("id");
+    expect(user).toHaveProperty("_id");
   });
 
   it("Authorize Invalid Password", async () => {
@@ -31,7 +37,6 @@ describe("UserCases", () => {
     const _authorization = await signUseCase.execute({
       email: "isa1@gmail.com",
       password: "1234",
-      name: "",
     });
 
     const { user, token, authorized } = _authorization;
