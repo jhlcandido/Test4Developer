@@ -6,6 +6,7 @@ describe("SessionController", () => {
     await request(app)
       .post("/signup")
       .send({
+        name: "Isamara",
         email: "isa@gmail.com",
         password: "1234",
       })
