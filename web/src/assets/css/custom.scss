@@ -1,0 +1,93 @@
+/* custom.scss */
+
+/* import the necessary Bootstrap files */
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+
+/* -------begin customization-------- */
+
+/* simply assign the value */
+
+/* or, use an existing variable */
+$theme-colors: (
+  success: #33cc7a,
+  primary: #071ac8,
+  primary-dark: #0a6259,
+  secondary: #eb1e2c,
+  gray: #92929d,
+);
+
+/* -------end customization-------- */
+
+/* finally, import Bootstrap to set the changes! */
+@import "bootstrap/scss/bootstrap.scss";
+
+.input-group-append .input-group-text {
+  border-radius: 0;
+  background-color: #fff;
+  border: 1px solid #707070;
+}
+
+.form-control {
+  height: 40px;
+  background-color: #fff;
+  border-radius: 0px;
+  color: #757575;
+  border: 1px solid #707070;
+  font-size: 1rem;
+}
+
+.form-control::placeholder {
+  color: #757575;
+  font-size: 1rem;
+}
+
+.form-control:focus {
+  border-color: rgba(7, 26, 200, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(7, 26, 200, 0.1);
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Poppins", sans-serif;
+}
+
+.btn {
+  font-weight: 500 !important;
+  font-family: "Roboto", sans-serif;
+  height: 52px;
+  font-size: 1.25rem;
+  padding: 0 15px;
+  border-radius: 20px;
+}
+
+.btn-md {
+  height: 38px;
+  font-size: 0.75rem;
+}
+
+.btn-sm {
+  height: 28px;
+  font-size: 0.62rem;
+}
+
+.degrade {
+  background: linear-gradient(
+    152.7deg,
+    #a22fd6 -0.99%,
+    #33cc7a 91.49%
+  ) !important;
+}
+
+.modal {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
