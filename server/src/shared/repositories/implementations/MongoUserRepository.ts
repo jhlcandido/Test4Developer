@@ -1,19 +1,22 @@
 import { Document, Model, Schema } from "mongoose";
 import IUser from "../../entities/interfaces/IUser";
+import { CustomError } from "../../ErrorHelpers/CustomError";
 import IUsersRepository from "../IUsersRepository";
 import { MongoContext } from "./MongoContext";
 
-const UserSchema = new Schema<IUser>({
+interface IUserDTO extends Omit<IUser, "_id">, Document { }
+
+const UserSchema = new Schema<IUserDTO>({
   name: { type: String, required: [true, "campo obrigatório"] },
-  email: { type: String, required: [true, "campo obrigatório"], unique: true },
-  password: { type: String, required: [true, "campo obrigatório"] },
-}); 
+  email: { type: String, required: [true, "campo obrigatório"], unique: [true, "e-mail em uso"] },
+  password: { type: String, required: [true, "campo obrigatório"], minlength: 4, },
+});
 
 export class MongoUserRepository
   extends MongoContext
   implements IUsersRepository {
   public id = "Users";
-  public model: Model<Document>;
+  public model: Model<IUserDTO>;
 
   constructor() {
     super();
@@ -21,24 +24,57 @@ export class MongoUserRepository
     this.model = this.conn.model("ModelName", UserSchema, this.id);
   }
 
-  async getByEmail(email: string): Promise<IUser | null> {
-    const _result = await this.model.collection.findOne<IUser>({ email });
+  async getById(_id: string): Promise<IUser | null> {
+    try {
+      const _result = await this.model.findById(_id);
 
-    return _result;
+      return _result?.toObject();
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
+
+  async getByEmail(email: string): Promise<IUser | null> {
+    try {
+      const _result = await this.model.findOne({ email });
+
+      return _result;
+    } catch (error) {
+      return null;
+    }
+  }
+
   getAll(): Promise<IUser[]> {
     throw new Error("Method not implemented.");
   }
   async save(data: IUser): Promise<IUser> {
+    const _user = new this.model(data);
+    const _result = await _user.validateSync();
+
+    if (_result?.errors) {
+      throw _result.errors;
+
+    }
+
     const _doc = await this.model.create<IUser>(data);
 
-    return { ...data, id: _doc.id };
+    return _doc;
   }
   bulkSave(data: IUser[]): Promise<IUser[]> {
     throw new Error("Method not implemented.");
   }
-  update(data: IUser): Promise<IUser> {
-    throw new Error("Method not implemented.");
+  async update(data: IUser): Promise<IUser | null> {
+    try {
+      const _doc = await this.model.findByIdAndUpdate(data._id, data, { new: true });
+
+      return _doc;
+    } catch (error) {
+      if (error.code === 11000 && error.keyPattern.email) {
+
+        throw new CustomError({ email: "E- mail já esta sendo utilizado" });
+      }
+      throw error;
+    }
   }
   delete(id: string): Promise<boolean> {
     throw new Error("Method not implemented.");
