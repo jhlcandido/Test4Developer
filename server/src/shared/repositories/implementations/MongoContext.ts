@@ -21,6 +21,8 @@ export class MongoContext {
       uri = `mongodb://${MONGO_DB_HOST}:${MONGO_DB_PORT}/${MONGO_DB_NAME}`;
     }
 
+    console.log(uri);
+
     this.conn = createConnection(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,

@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
+import { IStorageProvider } from "../../../shared/providers/IStorageProvider";
 import ITodosRepository from "../repositories/ITodosRepository";
 
 export class TodoController {
-  constructor(private todosRepository: ITodosRepository) {}
+  constructor(
+    private todosRepository: ITodosRepository,
+    private fileStorage: IStorageProvider
+  ) {}
 
   async get(req: Request, res: Response) {
     try {
@@ -18,7 +22,16 @@ export class TodoController {
     try {
       const _todo = { ...req.body };
 
-      if (req.file && req.file.filename) _todo.file_url = req.file.path;
+      if (req.file && req.file.filename) {
+        const [, extension] = req.file.mimetype.split("/");
+        const _file = `${req.file.path}.${extension}`;
+
+        const _url = await this.fileStorage.uploadFile({
+          filename: _file,
+          extension,
+        });
+        _todo.file_url = _url;
+      }
 
       const _response = await this.todosRepository.save(_todo);
 
