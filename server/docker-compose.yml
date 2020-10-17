@@ -1,22 +1,23 @@
 version: "3.7"
 
 services:
-  backend:
+  test4developer_api:
     build: .
-    container_name: test4developer
+    image: test4developer:dev
     depends_on:
       - "mongo"
     command: sh -c "
-     echo path diretorio atual &&
-     pwd &&
-     echo conteudo diretorio atual &&
-     ls -la &&
-     echo conteudo diretorio pai &&
-     ls -la ../ &&
-     cat package.json &&
-     npm run dev" 
+      echo path diretorio atual &&
+      pwd &&
+      echo conteudo diretorio atual &&
+      ls -la &&
+      echo conteudo diretorio pai &&
+      ls -la ../ &&
+      cat package.json &&
+      npm run dev"
     ports:
       - "4000:4000"
+      - "9229:9229"
     volumes:
       - .:/usr/test4developer/api
   mongo:
@@ -24,8 +25,8 @@ services:
     container_name: mongo
     ports:
       - "27017:27017"
-    volumes:
-      - ./mongodata:/data/db
+    # volumes:
+    #  - ./mongodata:/data/db
     restart: always
   mongo_express:
     image: mongo-express

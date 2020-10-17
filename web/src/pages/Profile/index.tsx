@@ -9,11 +9,13 @@ import { ReactComponent as IcEyeOpened } from "../../assets/images/ic_eye_opened
 import { ReactComponent as IcEyeClosed } from "../../assets/images/ic_eye_closed.svg";
 
 import { Container, IcProfile } from "./styles";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import { profileValidationSchema } from "../../validationSchemas/profile";
+import { setSession } from "../../redux/reducers/session/action";
 
 const Profile: React.FC = () => {
+  const dispach = useDispatch();
   const refFile = useRef<HTMLInputElement>(null);
   const user = useSelector<RootState, IUser>((state) => state.session.user!);
   const [show_password, setShowPassword] = useState(false);
@@ -21,9 +23,21 @@ const Profile: React.FC = () => {
   const [preview, setPreview] = useState("");
 
   function handleOnSubmit(data: IUser, actions: FormikHelpers<any>) {
-    api.post<IUser>("/users/me", data).then((r) => {
-      actions.resetForm();
-    });
+    api
+      .put<IUser>("/users/me", { _id: user._id, ...data })
+      .then((r) => {
+        actions.setValues({
+          ...r.data,
+          password: "",
+          password_confirmation: "",
+        });
+
+        dispach(
+          setSession({
+            user: r.data,
+          })
+        );
+      });
   }
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {

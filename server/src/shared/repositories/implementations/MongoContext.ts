@@ -1,7 +1,7 @@
-import { MongoClient } from "mongodb";
 import { Connection, createConnection } from "mongoose";
 
 export class MongoContext {
+  public id: string;
   public conn: Connection;
 
   constructor() {
@@ -11,6 +11,7 @@ export class MongoContext {
     const MONGO_DB_PASS = process.env.MONGO_DB_PASS;
     const MONGO_DB_PORT = process.env.MONGO_DB_PORT;
 
+    this.id = "";
     let uri = "";
 
     if (!MONGO_DB_PORT) {

@@ -26,7 +26,7 @@ export class SignUpUseCase {
     const _user = await this.usersRepository.save(user);
 
     await this.mailProvider.sendMail({
-      subject: "Bem vindo ao Ecofreelas",
+      subject: "Bem vindo ao Test4Developer",
       to: user.email,
       html: MailUtils.wellcomeMail(user),
       text: MailUtils.wellcomeMail(user),

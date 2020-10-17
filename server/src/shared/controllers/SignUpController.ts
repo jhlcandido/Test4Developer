@@ -8,14 +8,14 @@ export class SignUpController {
     try {
       const { email, password } = req.body;
 
-      if (!email)
-        return res.status(401).json({ message: "preencha o campo email" });
-      if (!password)
-        return res.status(401).json({ message: "preencha o campo password" });
+      // if (!email)
+      //   return res.status(401).json({ message: "preencha o campo email" });
+      // if (!password)
+      //   return res.status(401).json({ message: "preencha o campo password" });
 
       const _response = await this.signUpUseCase.execute(req.body);
 
-      res.status(200).json(_response);
+      res.status(201).json(_response);
     } catch (error) {
       res.status(400).json(error);
     }
