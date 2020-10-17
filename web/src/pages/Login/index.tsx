@@ -90,12 +90,12 @@ const Login: React.FC = () => {
                   <div className="input-group-append">
                     <span
                       className="input-group-text"
-                      style={{
-                        backgroundColor: "#fafafb",
-                        borderTopRightRadius: 15,
-                        borderBottomRightRadius: 15,
-                        borderColor: "#f1f1f5",
-                      }}
+                      // style={{
+                      //   backgroundColor: "#fafafb",
+                      //   borderTopRightRadius: 15,
+                      //   borderBottomRightRadius: 15,
+                      //   borderColor: "#f1f1f5",
+                      // }}
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
                       {!show_password && <IcEyeOpened />}
