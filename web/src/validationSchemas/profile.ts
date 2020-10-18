@@ -10,5 +10,4 @@ export const profileValidationSchema = Yup.object({
     "A senha não é identica"
   ),
   name: Yup.string().required("Preencha o campo nome"),
-  image: Yup.mixed(),
 });

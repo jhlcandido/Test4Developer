@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import { profileValidationSchema } from "../../validationSchemas/profile";
 import { setSession } from "../../redux/reducers/session/action";
+import { getProperty } from "../../utils/object";
 
 const Profile: React.FC = () => {
   const dispach = useDispatch();
@@ -23,8 +24,26 @@ const Profile: React.FC = () => {
   const [preview, setPreview] = useState("");
 
   function handleOnSubmit(data: IUser, actions: FormikHelpers<any>) {
+    var formData = new FormData();
+
+    for (var i in data) {
+      var _value = getProperty<IUser, any>(data, i);
+      console.log("property", { i, data, _value });
+
+      if (i != "image") formData.append(i, _value);
+    }
+
+    if (!!refFile.current?.files && !!refFile.current.files[0]) {
+      console.log("has image");
+      formData.append("image", refFile.current.files[0]);
+    }
+
     api
-      .put<IUser>("/users/me", { _id: user._id, ...data })
+      .put<IUser>("/users/me", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((r) => {
         actions.setValues({
           ...r.data,
@@ -83,7 +102,6 @@ const Profile: React.FC = () => {
               email: user.email,
               password: "",
               password_confirmation: "",
-              image: {},
             }}
             validationSchema={profileValidationSchema}
             onSubmit={(values, actions) => handleOnSubmit(values, actions)}
