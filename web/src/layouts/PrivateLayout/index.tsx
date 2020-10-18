@@ -68,7 +68,13 @@ const PrivateLayout: React.FC = ({ children }) => {
               <li className={`nav-item pt-4 pl-3 pr-3 pb-5 mb-4`}>
                 <Link className={`nav-link text-white`} to="/meu-perfil">
                   <div className="d-flex align-items-center">
-                    <Logo />
+                    {!user.image && <Logo />}
+                    {!!user.image && (
+                      <div
+                        className="nav-bar-user-photo"
+                        style={{ backgroundImage: `url(${user.image})` }}
+                      />
+                    )}
                     <div className="ml-3">
                       <h5 className="m-0">{user.name}</h5>
                       <span>{user.email}</span>

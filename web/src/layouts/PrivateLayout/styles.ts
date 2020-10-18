@@ -42,6 +42,14 @@ export const Nav = styled.nav`
     z-index: -1;
   }
 
+  .nav-bar-user-photo {
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    background-size: cover;
+    background-position: center center;
+  }
+
   .nav-item.active a.nav-link {
     color: var(--secondary) !important;
   }
