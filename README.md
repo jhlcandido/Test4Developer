@@ -1,40 +1,51 @@
 # Test4Developer
 
-Vaga de desesenvolvedor Sênior
-
-Olá, para este teste analisaremos seu conhecimento geral e inclusive velocidade de desenvolvimento. Abaixo, maiores detalhes sobre o que precisamos.
+Olá, siga as instruções abaixo para executar o projeto
 
 # Instruções
-Você deve desenvolver uma API, utilizando Node.JS, para uma aplicação de gerenciamento de TODO's.
 
-Também será necessário desenvolver o front-end, baseado no link abaixo:
-https://xd.adobe.com/view/ac2e4c87-dfca-473b-8f10-95ec93f8ff99-f97d/
+para executar o projeto precisaremos de.
 
-A escolha das bibliotecas ou arquitetura fica a seu critério.
+- uma conta no firebase.
+- um projeto no console do firebase.
+- uma aplicação web vinculada ao projeto do firebase.
+- versão LTS do [NodeJS](https://nodejs.org/en/) instalada na maquina.
 
-O Banco de dados, pedirmos que utilize mongoDb ou Firebase, de preferência ambos.
+## Configurando Projeto do [Firebase](https://console.firebase.google.com)
 
-Altere o arquivo README explicando o que é preciso para rodar sua aplicação.
+    - acesse o console do firebase crie uma caso não possua
+    - acesse seu projeto no console / crie um caso não possua
+    - nas configurações do projeto crie uma aplicação do tipo WEB
+    - na tela de configuraçoes acesse a aba Contas de Serviço
+    - no final da tela clique no botão "Gerar nova chave privada"
+    - copie o conteudo do arquivo gerado no arquivo firebase_config.json encontrado no caminho "/server/firebase_config.json"
 
-# API
-A API precisa ser desenvolvida em Node.JS, e deverá ser possível:
+## Ambiente de Testes
 
-Authenticação
-Login/Logout
-Lembrete de senha
-Listar todos os TODO's.
-Adicionar um novo TODO.
-Alterar um TODO.
-Deletar um TODO.
-Upload de Imagem por TODO.
+#### Definindo variaveis de ambiente
 
-Entrega
-Para iniciar o teste, faça um fork deste repositório, crie uma branch com o seu nome completo e depois envie-nos o pull request. Se você apenas clonar o repositório não vai conseguir fazer push e depois vai ser mais complicado fazer o pull request.
+    - abra o arquivo .dev.env na pasta /diretorio_do_projeto/api
+    - preencha os dados do ambiente
+        - APP_SECRET= este campo é obrigatorio crie uma chave e inclua aqui
+        - MONGO_DB_HOST= endereço do mongodb
+        - MONGO_DB_PORT= informe apenas se o mongo db estiver rodando fora da porta default
+        - MONGO_DB_USER= informe o usuario caso o banco possua autenticacao
+        - MONGO_DB_PASS= informe a senha caso possua autenticacao
+        - MONGO_DB_NAME= informe o nome do banco
+        - PORT= informe a porta onde a api sera acessada
 
-Nossa análise
-Organização do código, separação de módulos, legibilidade e comentários.
-Histórico de commits.
-Dúvidas?
-Quaisquer dúvida que venha a ter, pode entrar em contato via Whatsapp.
+### Executando a API
 
-Boa sorte!
+    - após configurar o projeto do firebase e definir as variaveis de ambiente
+    - execute o comando
+
+    $ npm run dev
+
+### Executando o projeto WEB
+
+    - abra o arquivo /diretorio_do_projeto/web/src/services/index.ts
+        - substitua a url da linha 4 pelo endereço da api de desenvolvimento
+    - abra o terminal na pasta /diretorio_do_projeto/web
+    - execute o comando
+
+    $ npm start
