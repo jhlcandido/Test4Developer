@@ -1,0 +1,11 @@
+{
+  "name": "test4developer",
+  "version": "1.0.0",
+  "description": "package para realizar o deploy no heroku",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd server; npm install; npm start"
+  },
+  "author": "",
+  "license": "ISC"
+}
