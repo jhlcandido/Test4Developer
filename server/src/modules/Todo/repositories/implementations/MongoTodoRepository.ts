@@ -1,4 +1,4 @@
-import { Document, Model, Schema, SchemaTypes } from "mongoose";
+import { Document, Model, Schema, SchemaType, SchemaTypes } from "mongoose";
 import IUser from "../../../../shared/entities/interfaces/IUser";
 import { MongoContext } from "../../../../shared/repositories/implementations/MongoContext";
 import ITodo from "../../entities/interfaces/ITodo";
@@ -8,7 +8,7 @@ interface ITodoSchema extends Document {
   name: string;
   completed: boolean;
   file_url: string;
-  author: IUser;
+  author: any;
 }
 
 const TodoSchema = new Schema({
@@ -45,6 +45,13 @@ export class MongoTodoRepository
 
     return _todos;
   }
+
+  async getAllByUserId(_id: string): Promise<ITodo[]> {
+    const _todos = await this.model.find({ author: _id }).populate("author");
+
+    return _todos;
+  }
+
   async save(data: ITodo): Promise<ITodo> {
     const _doc = await this.model.create<ITodo>(data);
 

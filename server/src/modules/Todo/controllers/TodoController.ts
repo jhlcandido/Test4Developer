@@ -6,11 +6,11 @@ export class TodoController {
   constructor(
     private todosRepository: ITodosRepository,
     private fileStorage: IStorageProvider
-  ) {}
+  ) { }
 
   async get(req: Request, res: Response) {
     try {
-      const _response = await this.todosRepository.getAll();
+      const _response = await this.todosRepository.getAllByUserId(req._id);
 
       res.status(200).json(_response);
     } catch (error) {
