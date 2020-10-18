@@ -1,20 +1,18 @@
 import { Document, Model, Schema, SchemaType, SchemaTypes } from "mongoose";
-import IUser from "../../../../shared/entities/interfaces/IUser";
 import { MongoContext } from "../../../../shared/repositories/implementations/MongoContext";
 import ITodo from "../../entities/interfaces/ITodo";
 import ITodosRepository from "../ITodosRepository";
 
-interface ITodoSchema extends Document {
-  name: string;
-  completed: boolean;
-  file_url: string;
+interface ITodoDTO extends Omit<ITodo, "_id" | "author">, Document {
   author: any;
 }
 
-const TodoSchema = new Schema({
+const TodoSchema = new Schema<ITodoDTO>({
   name: { type: String, required: [true, "campo nome é obrigatório"] },
   completed: { type: Boolean, default: false },
   file_url: { type: String },
+  deadline: { type: Date, default: null },
+  created: { type: Date, required: true, default: new Date() },
   author: {
     ref: "Users",
     type: SchemaTypes.ObjectId,
@@ -26,12 +24,12 @@ export class MongoTodoRepository
   extends MongoContext
   implements ITodosRepository {
   public id = "Todos";
-  public model: Model<ITodoSchema>;
+  public model: Model<ITodoDTO>;
 
   constructor() {
     super();
 
-    this.model = this.conn.model<ITodoSchema>(this.id, TodoSchema);
+    this.model = this.conn.model<ITodoDTO>(this.id, TodoSchema);
   }
 
   async getById(_id: string): Promise<ITodo | null> {

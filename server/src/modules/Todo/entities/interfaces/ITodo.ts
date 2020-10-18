@@ -6,6 +6,7 @@ interface ITodo {
   completed: boolean;
   file_url: string;
   author: IUser;
+  deadline: Date;
 }
 
 export default ITodo;

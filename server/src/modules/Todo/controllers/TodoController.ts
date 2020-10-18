@@ -10,7 +10,7 @@ export class TodoController {
 
   async get(req: Request, res: Response) {
     try {
-      const _response = await this.todosRepository.getAllByUserId(req._id);
+      const _response = await this.todosRepository.getAllByUserId(req._id!);
 
       res.status(200).json(_response);
     } catch (error) {
@@ -24,7 +24,6 @@ export class TodoController {
 
       if (req.file && req.file.filename) {
         const [, extension] = req.file.mimetype.split("/");
-        const _file = `${req.file.path}.${extension}`;
 
         const _url = await this.fileStorage.uploadFile({
           filename: req.file.path,
@@ -43,7 +42,23 @@ export class TodoController {
 
   async put(req: Request, res: Response) {
     try {
-      const _response = await this.todosRepository.update(req.body);
+
+      const _todo = { ...req.body, author: req._id };
+
+      if (_todo.date) _todo.date = new Date(_todo.date).toISOString();
+      if (_todo.deadline) _todo.deadline = new Date(_todo.deadline).toISOString();
+
+      if (req.file && req.file.filename) {
+        const [, extension] = req.file.mimetype.split("/");
+
+        const _url = await this.fileStorage.uploadFile({
+          filename: req.file.path,
+          extension,
+        });
+        _todo.file_url = _url;
+      }
+
+      const _response = await this.todosRepository.update(_todo);
 
       res.status(200).json(_response);
     } catch (error) {

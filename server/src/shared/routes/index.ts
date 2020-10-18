@@ -14,10 +14,11 @@ router.post("/authorize", (req, res) => sessionController.post(req, res));
 
 router.post("/signup", (req, res) => signUpController.post(req, res));
 
+router.use(session); // todas rotas registradas apartir deste ponto deverao ser autenticadas
+
 router.put("/users/me", upload.single("image"), (req, res) =>
   profileController.put(req, res)
 );
 
-router.use(session);
 
 export { router };

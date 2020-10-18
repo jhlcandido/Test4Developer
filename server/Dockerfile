@@ -1,4 +1,4 @@
-from node:alpine
+FROM node:12-alpine
 workdir /usr/test4developer/api
 copy package*.json ./
 run npm install
