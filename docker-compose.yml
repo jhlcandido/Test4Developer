@@ -1,0 +1,49 @@
+version: "3.7"
+
+services:
+  test4developer_web:
+    build: ./web
+    image: test4developer_web:dev
+    environment:
+      - NODE_ENV=development
+    command: npm run start
+    ports:
+      - "4001:3000"
+    volumes:
+      - ./web:/usr/test4developer/web
+      - /usr/test4developer/web/node_modules
+    restart: always
+  # test4developer_api:
+  #   build: ./server
+  #   image: test4developer_api:dev
+  #   depends_on:
+  #     - "mongo"
+  #   command: sh -c "
+  #     echo path diretorio atual &&
+  #     pwd &&
+  #     echo conteudo diretorio atual &&
+  #     ls -la &&
+  #     echo conteudo diretorio pai &&
+  #     ls -la ../ &&
+  #     cat package.json &&
+  #     npm run dev:docker"
+  #   ports:
+  #     - "4000:4000"
+  #     - "9229:9229"
+  #   volumes:
+  #     - ./server:/usr/test4developer/api
+  #   restart: always
+  # mongo:
+  #   image: "mongo:4.2.6-bionic"
+  #   container_name: mongo
+  #   ports:
+  #     - "27017:27017"
+  #   restart: always
+  # mongo_express:
+  #   image: mongo-express
+  #   container_name: mongo_express
+  #   depends_on:
+  #     - "mongo"
+  #   ports:
+  #     - "8081:8081"
+  #   restart: always
