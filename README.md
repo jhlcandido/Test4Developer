@@ -2,6 +2,9 @@
 
 Olá, siga as instruções abaixo para executar o projeto
 
+acesse o link [https://test4developer.netlify.app](https://test4developer.netlify.app) para visualizar o site em execução no [netlify](https://netlify.com)
+acesse o link [https://api-test4developer.herokuapp.com](https://api-test4developer.herokuapp.com) para visualizar a api em execução no [heroku](https://heroku.com.br)
+
 # Instruções
 
 para executar o projeto precisaremos de.
