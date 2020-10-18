@@ -1,5 +1,5 @@
 import { ErrorMessage, Form, Formik, FormikHelpers } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ReactComponent as IcEyeOpened } from "../../assets/images/ic_eye_opened.svg";
@@ -23,11 +23,11 @@ const NewAccount: React.FC = () => {
   const history = useHistory();
   const [validation, setValidation] = useState<ILoginValidate>({});
 
-  const [isMember, setIsMember] = useState(true);
   const [isBusy, setIsBusy] = useState(false);
   const [show_password, setShowPassword] = useState(false);
 
   async function handleOnSubmit(data: IUser, actions: FormikHelpers<any>) {
+    setIsBusy(true);
     return api
       .post<{ user: IUser; message: string }>(`/signup`, data)
       .then((response) => {
@@ -46,6 +46,9 @@ const NewAccount: React.FC = () => {
           const _message = error.response.data.message;
           setValidation({ ...validation, message: _message });
         }
+      })
+      .finally(() => {
+        setIsBusy(false);
       });
   }
 

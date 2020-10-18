@@ -11,14 +11,8 @@ const PrivateLayout: React.FC = ({ children }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const user = useSelector<RootState, IUser>((state) => state.session.user!);
-  const has_notifications = useSelector<RootState, boolean>(
-    (state) => state.session.has_notifications!
-  );
 
-  const [profileActionsVisible, setProfileActionsVisible] = useState<boolean>(
-    false
-  );
-  const [menuMobileVisible, setMenuMobileVisible] = useState<boolean>(false);
+  const [menuMobileVisible, setMenuMobileVisible] = useState<boolean>(false); 
   const menu = [
     {
       title: "Dados Pessoais",
@@ -29,10 +23,6 @@ const PrivateLayout: React.FC = ({ children }) => {
       to: "/",
     },
   ];
-
-  function resetVisibilitVariables() {
-    setProfileActionsVisible(false);
-  }
 
   function handleLogout() {
     dispatch(logout());
@@ -45,7 +35,7 @@ const PrivateLayout: React.FC = ({ children }) => {
 
   return (
     <div className="d-flex align-items-start vh-100">
-      <Nav className="navbar navbar-expand-md navbar-light bg-dark">
+      <Nav className="navbar navbar-expand-md navbar-light bg-dark vh-100">
         <div className="background" />
         <button
           id="logout"
@@ -100,7 +90,7 @@ const PrivateLayout: React.FC = ({ children }) => {
       </Nav>
       <Container
         className="flex-fill"
-        onClick={() => resetVisibilitVariables()}
+        onClick={() => setMenuMobileVisible(false)}
       >
         {children}
       </Container>

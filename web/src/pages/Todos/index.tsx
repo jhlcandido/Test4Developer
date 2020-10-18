@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import TodoModal from "../../components/TodoModal";
 import ITodo from "../../interfaces/ITodo";
 import { api } from "../../services/api";
 
-import { Container } from "./styles";
+import { Container, TodoList } from "./styles";
 
 const Todos: React.FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
   const [name, setName] = useState("");
+  const [todoModalVisible, setTodoModalVisible] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<ITodo | null>(null);
 
   useEffect(() => {
     loadTodos();
@@ -61,6 +64,18 @@ const Todos: React.FC = () => {
     }
   }
 
+  function handleChangeTodo(todo: ITodo) {
+    if (!todo.completed) {
+      setSelectedTodo(todo);
+      setTodoModalVisible(true);
+    }
+  }
+
+  function handleCloseTodoModal() {
+    setTodoModalVisible(false);
+    setSelectedTodo(null);
+  }
+
   return (
     <Container className="container pt-5">
       <div
@@ -80,18 +95,23 @@ const Todos: React.FC = () => {
 
           <h5 className="mt-2 mb-4">Lista de Tarefas</h5>
 
-          <ul className="flex-fill" style={{ listStyle: "none" }}>
+          <TodoList className="flex-fill">
             {todos.map((v) => (
-              <li className={v.completed ? "completed" : ""}>
+              <li
+                key={`todo_${v._id}`}
+                className={v.completed ? "completed" : ""}
+              >
                 <div className="form-group form-check">
                   <input
                     type="checkbox"
                     className="form-check-input"
-                    id="exampleCheck1"
                     checked={v.completed}
                     onChange={() => toggleTodo(v)}
                   />
-                  <label className="form-check-label" htmlFor="exampleCheck1">
+                  <label
+                    className="form-check-label"
+                    onClick={() => handleChangeTodo(v)}
+                  >
                     {v.name}
                   </label>
 
@@ -106,7 +126,7 @@ const Todos: React.FC = () => {
                 </div>
               </li>
             ))}
-          </ul>
+          </TodoList>
 
           <div className="d-flex pb-2">
             <input
@@ -125,6 +145,14 @@ const Todos: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {todoModalVisible && !!selectedTodo && (
+        <TodoModal
+          close={() => handleCloseTodoModal()}
+          success={() => loadTodos()}
+          todo={selectedTodo}
+        />
+      )}
     </Container>
   );
 };

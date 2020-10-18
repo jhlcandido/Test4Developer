@@ -39,8 +39,16 @@ const Login: React.FC = () => {
       .catch((error) => {
         setIsBusy(false);
 
-        // console.log("error", error.response);
-        if (error.response.data) {
+        console.log("error", error);
+
+        if (!error.response && error.message === "Network Error") {
+          setMessage(
+            "Não foi possível realizar o login, tente novamente em alguns instantes."
+          );
+          return;
+        }
+
+        if (error.response?.data) {
           const _message = error.response.data.message;
           setMessage(_message);
         }

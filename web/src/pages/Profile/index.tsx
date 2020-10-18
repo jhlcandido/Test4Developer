@@ -1,8 +1,7 @@
-import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
-import React, { useEffect, useRef, useState } from "react";
+import { ErrorMessage, Form, Formik, FormikHelpers } from "formik";
+import React, { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import CustomField from "../../components/CustomField";
-import ITodo from "../../interfaces/ITodo";
 import { IUser } from "../../interfaces/IUser";
 import { api } from "../../services/api";
 import { ReactComponent as IcEyeOpened } from "../../assets/images/ic_eye_opened.svg";
@@ -24,17 +23,16 @@ const Profile: React.FC = () => {
   const [preview, setPreview] = useState("");
 
   function handleOnSubmit(data: IUser, actions: FormikHelpers<any>) {
+    setIsBusy(true);
     var formData = new FormData();
 
     for (var i in data) {
       var _value = getProperty<IUser, any>(data, i);
-      console.log("property", { i, data, _value });
 
-      if (i != "image") formData.append(i, _value);
+      if (i !== "image" && !!_value) formData.append(i, _value);
     }
 
     if (!!refFile.current?.files && !!refFile.current.files[0]) {
-      console.log("has image");
       formData.append("image", refFile.current.files[0]);
     }
 
@@ -45,17 +43,25 @@ const Profile: React.FC = () => {
         },
       })
       .then((r) => {
+        setIsBusy(false);
+
+        toast.success("Perfil atualizado com sucesso!");
+
         actions.setValues({
           ...r.data,
           password: "",
           password_confirmation: "",
         });
 
-        dispach(
-          setSession({
-            user: r.data,
-          })
-        );
+        if (r.data._id)
+          dispach(
+            setSession({
+              user: r.data,
+            })
+          );
+      })
+      .catch((e) => {
+        setIsBusy(false);
       });
   }
 
@@ -79,6 +85,10 @@ const Profile: React.FC = () => {
     }
   }
 
+  function handleChangeImage() {
+    refFile?.current?.click();
+  }
+
   return (
     <Container className="container pt-5">
       <div
@@ -96,6 +106,39 @@ const Profile: React.FC = () => {
             </ol>
           </nav>
 
+          <input
+            ref={refFile}
+            onChange={(e) => handleImageChange(e)}
+            id="image"
+            name="image"
+            type="file"
+            className="d-none"
+            accept=".jpg,.jpeg,.png"
+          />
+
+          <div className="d-inline-flex align-self-start flex-column align-items-center mt-5">
+            <div className="photo">
+              {preview || user.image ? (
+                <div
+                  className="preview"
+                  style={{
+                    backgroundImage: `url(${
+                      preview || user.image?.toString()
+                    })`,
+                  }}
+                />
+              ) : (
+                <IcProfile />
+              )}
+            </div>
+            <button
+              className="btn btn-md btn-link text-dark"
+              onClick={handleChangeImage}
+            >
+              alterar foto
+            </button>
+          </div>
+
           <Formik
             initialValues={{
               name: user.name,
@@ -106,39 +149,7 @@ const Profile: React.FC = () => {
             validationSchema={profileValidationSchema}
             onSubmit={(values, actions) => handleOnSubmit(values, actions)}
           >
-            <Form className="mt-5">
-              <div className="d-inline-flex flex-column align-items-center">
-                <div className="photo">
-                  {preview || user.image ? (
-                    <div
-                      className="preview"
-                      style={{
-                        backgroundImage: `url(${
-                          preview || user.image?.toString()
-                        })`,
-                      }}
-                    />
-                  ) : (
-                    <IcProfile />
-                  )}
-                </div>
-                <button
-                  className="btn btn-md btn-link text-dark"
-                  onClick={() => refFile?.current?.click()}
-                >
-                  alterar foto
-                </button>
-                <input
-                  ref={refFile}
-                  onChange={(e) => handleImageChange(e)}
-                  id="image"
-                  name="image"
-                  type="file"
-                  className="d-none"
-                  accept=".jpg,.jpeg,.png"
-                />
-              </div>
-
+            <Form>
               <CustomField type="text" name="name" placeholder="Nome" />
               <ErrorMessage
                 component="div"

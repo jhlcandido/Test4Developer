@@ -17,7 +17,7 @@ export const Container = styled.div`
 `;
 
 export const Nav = styled.nav`
-  overflow-x: hidden;
+  overflow: hidden;
   background-color: transparent !important;
 
   #logout {

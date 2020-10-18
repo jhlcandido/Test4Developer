@@ -3,6 +3,7 @@ interface ITodo {
   name?: string;
   completed: boolean;
   file_url: string;
+  deadline: string | Date;
 }
 
 export default ITodo;
