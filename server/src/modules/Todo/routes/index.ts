@@ -1,8 +1,9 @@
 import express from "express";
 import multer from "multer";
+import multerConfig from "../../../shared/config/multer";
 import session from "../../../shared/middleware/session";
 import { todoController } from "../controllers";
-var upload = multer({ dest: "uploads/" });
+var upload = multer(multerConfig);
 var router = express.Router();
 
 router.use(session);

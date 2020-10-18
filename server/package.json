@@ -10,6 +10,7 @@
     "build": "mkdir ./dist; sucrase ./src -d ./dist/src --transforms typescript,imports && cp ./package.json ./dist && cp ./.env ./dist",
     "prestart": "mkdir ./dist; sucrase ./src -d ./dist/src --transforms typescript,imports && cp ./package.json ./dist && cp ./.env ./dist",
     "start": "cross-env NODE_ENV=prod node dist/src/server.js",
+    "dev:docker": "cross-env NODE_ENV=docker tsnd --inspect=0.0.0.0 --transpile-only --respawn --ignore-watch node_modules src/server.ts",
     "dev": "cross-env NODE_ENV=dev tsnd --inspect=0.0.0.0 --transpile-only --respawn --ignore-watch node_modules src/server.ts",
     "test": "cross-env NODE_ENV=test jest",
     "swagger-autogen": "node src/swagger.ts"

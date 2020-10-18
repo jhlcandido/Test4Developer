@@ -14,12 +14,13 @@ services:
       echo conteudo diretorio pai &&
       ls -la ../ &&
       cat package.json &&
-      npm run dev"
+      npm run dev:docker"
     ports:
       - "4000:4000"
       - "9229:9229"
     volumes:
       - .:/usr/test4developer/api
+    restart: always
   mongo:
     image: "mongo:4.2.6-bionic"
     container_name: mongo

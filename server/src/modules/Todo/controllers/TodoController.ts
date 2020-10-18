@@ -20,14 +20,14 @@ export class TodoController {
 
   async post(req: Request, res: Response) {
     try {
-      const _todo = { ...req.body };
+      const _todo = { ...req.body, author: req._id };
 
       if (req.file && req.file.filename) {
         const [, extension] = req.file.mimetype.split("/");
         const _file = `${req.file.path}.${extension}`;
 
         const _url = await this.fileStorage.uploadFile({
-          filename: _file,
+          filename: req.file.path,
           extension,
         });
         _todo.file_url = _url;
@@ -56,7 +56,8 @@ export class TodoController {
       const { id } = req.params;
       const _response = await this.todosRepository.delete(id);
 
-      res.status(200).json(_response);
+      if (_response) res.status(204).send();
+      else res.status(404).send();
     } catch (error) {
       res.status(400).json(error);
     }

@@ -1,8 +1,7 @@
 let path = ".env";
-if (process.env.NODE_ENV === "test") {
-  path = ".test.env";
-} else if (process.env.NODE_ENV === "dev") {
-  path = ".dev.env";
+
+if (process.env.NODE_ENV) {
+  path = `.${process.env.NODE_ENV}.env`;
 }
 
 require("dotenv").config({
@@ -24,6 +23,7 @@ class AppController {
   server: http.Server;
 
   constructor() {
+    console.log("app constructor");
     this.express = express();
     this.server = http.createServer(this.express);
 
@@ -48,6 +48,7 @@ class AppController {
   }
 
   loadModules() {
+    console.log("loadmodules");
     new Todo(this.express, this.server);
   }
 

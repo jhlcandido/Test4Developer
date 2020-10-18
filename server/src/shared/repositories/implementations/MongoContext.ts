@@ -1,4 +1,8 @@
-import { Connection, createConnection } from "mongoose";
+import { Connection, createConnection, Mongoose } from "mongoose";
+
+declare global {
+  var conn: Connection | null;
+}
 
 export class MongoContext {
   public id: string;
@@ -22,11 +26,14 @@ export class MongoContext {
       uri = `mongodb://${MONGO_DB_HOST}:${MONGO_DB_PORT}/${MONGO_DB_NAME}`;
     }
 
-    console.log(uri);
+    // reaproveita a conexao criada anteriormente para nao perder a definição dos modelos
+    this.conn =
+      global.conn ||
+      createConnection(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
 
-    this.conn = createConnection(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    global.conn = this.conn;
   }
 }

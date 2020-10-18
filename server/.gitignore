@@ -8,3 +8,5 @@ coverage
 .DS_Store
 /uploads
 /mongodata
+tmp
+firebase_config.json

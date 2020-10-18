@@ -4,12 +4,23 @@ import { CustomError } from "../../ErrorHelpers/CustomError";
 import IUsersRepository from "../IUsersRepository";
 import { MongoContext } from "./MongoContext";
 
-interface IUserDTO extends Omit<IUser, "_id">, Document { }
+interface IUserDTO extends Omit<IUser, "_id">, Document {}
 
 const UserSchema = new Schema<IUserDTO>({
   name: { type: String, required: [true, "campo obrigatório"] },
-  email: { type: String, required: [true, "campo obrigatório"], unique: [true, "e-mail em uso"] },
-  password: { type: String, required: [true, "campo obrigatório"], minlength: 4, },
+  email: {
+    type: String,
+    required: [true, "campo obrigatório"],
+    unique: [true, "e-mail em uso"],
+  },
+  password: {
+    type: String,
+    required: [true, "campo obrigatório"],
+    minlength: 4,
+  },
+  image: {
+    type: String,
+  },
 });
 
 export class MongoUserRepository
@@ -21,7 +32,7 @@ export class MongoUserRepository
   constructor() {
     super();
 
-    this.model = this.conn.model("ModelName", UserSchema, this.id);
+    this.model = this.conn.model(this.id, UserSchema);
   }
 
   async getById(_id: string): Promise<IUser | null> {
@@ -48,14 +59,6 @@ export class MongoUserRepository
     throw new Error("Method not implemented.");
   }
   async save(data: IUser): Promise<IUser> {
-    const _user = new this.model(data);
-    const _result = await _user.validateSync();
-
-    if (_result?.errors) {
-      throw _result.errors;
-
-    }
-
     const _doc = await this.model.create<IUser>(data);
 
     return _doc;
@@ -65,12 +68,13 @@ export class MongoUserRepository
   }
   async update(data: IUser): Promise<IUser | null> {
     try {
-      const _doc = await this.model.findByIdAndUpdate(data._id, data, { new: true });
+      const _user = await this.model.findByIdAndUpdate(data._id, data, {
+        new: true,
+      });
 
-      return _doc;
+      return _user;
     } catch (error) {
       if (error.code === 11000 && error.keyPattern.email) {
-
         throw new CustomError({ email: "E- mail já esta sendo utilizado" });
       }
       throw error;

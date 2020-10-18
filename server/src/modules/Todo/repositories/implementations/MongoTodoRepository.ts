@@ -1,4 +1,5 @@
-import { Document, Model, Schema } from "mongoose";
+import { Document, Model, Schema, SchemaTypes } from "mongoose";
+import IUser from "../../../../shared/entities/interfaces/IUser";
 import { MongoContext } from "../../../../shared/repositories/implementations/MongoContext";
 import ITodo from "../../entities/interfaces/ITodo";
 import ITodosRepository from "../ITodosRepository";
@@ -7,12 +8,18 @@ interface ITodoSchema extends Document {
   name: string;
   completed: boolean;
   file_url: string;
+  author: IUser;
 }
 
 const TodoSchema = new Schema({
   name: { type: String, required: [true, "campo nome é obrigatório"] },
   completed: { type: Boolean, default: false },
   file_url: { type: String },
+  author: {
+    ref: "Users",
+    type: SchemaTypes.ObjectId,
+    required: [true, "campo author é obrigatôrio"],
+  },
 });
 
 export class MongoTodoRepository
@@ -24,16 +31,17 @@ export class MongoTodoRepository
   constructor() {
     super();
 
-    this.model = this.conn.model<ITodoSchema>("ModelName", TodoSchema, this.id);
+    this.model = this.conn.model<ITodoSchema>(this.id, TodoSchema);
   }
 
-  async getByEmail(email: string): Promise<ITodo | null> {
-    const _result = await this.model.findOne({ email });
+  async getById(_id: string): Promise<ITodo | null> {
+    const _result = await this.model.findById(_id);
 
     return _result;
   }
+
   async getAll(): Promise<ITodo[]> {
-    const _todos = await this.model.find({}).exec();
+    const _todos = await this.model.find({}).populate("author");
 
     return _todos;
   }
@@ -45,8 +53,10 @@ export class MongoTodoRepository
   bulkSave(data: ITodo[]): Promise<ITodo[]> {
     throw new Error("Method not implemented.");
   }
-  async update(data: ITodo): Promise<ITodo> {
-    const _result = await this.model.updateOne({ _id: data._id }, data);
+  async update(data: ITodo): Promise<ITodo | null> {
+    const _result = await this.model.findByIdAndUpdate(data._id, data, {
+      new: true,
+    });
 
     return _result;
   }

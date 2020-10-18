@@ -11,19 +11,18 @@ export class EditProfileUseCase {
   constructor(
     private usersRepository: IUsersRepository,
     private mailProvider: IMailProvider
-  ) { }
+  ) {}
 
   async execute(user: IUser): Promise<IUser | null | { message: string }> {
     const _user_exists = await this.usersRepository.getById(user._id!);
 
-    if (!_user_exists)
-      return { message: "usuário não encontrado." };
+    if (!_user_exists) return { message: "usuário não encontrado." };
 
     // realiza o merge do usuario salvo no banco com o novos valores informados
     let _user: IUser | null = { ..._user_exists, ...user };
 
     // valida se a senha foi alterada para criptografar a nova senha
-    if (_user) {
+    if (user.password) {
       _user.password = crypto
         .createHash("sha256")
         .update(user.password!)
