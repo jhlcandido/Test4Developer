@@ -59,13 +59,13 @@ const Login: React.FC = () => {
     <div className="container-fluid">
       <div className="row vh-100 text-right">
         <div
-          className="col-7 d-flex align-items-center justify-content-center"
+          className="col-7 col-lg-8 d-flex align-items-center justify-content-center"
           style={{ paddingBottom: "66px" }}
         >
           <Logo width="202" />
         </div>
         <div
-          className="col-5 bg-white col-auto d-flex flex-column justify-content-center"
+          className="col-5 col-lg-4 bg-white col-auto d-flex flex-column justify-content-center"
           style={{ paddingBottom: "66px" }}
         >
           <Container className="p-5 w-100">
